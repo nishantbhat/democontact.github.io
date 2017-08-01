@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Contact list</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="node_modules/ng-toast/dist/ngToast.min.css">
+
+
+</head>
+
+<body>
+
+
+<div class="global-wrapper" ng-app="myApp">
+    <toast></toast>
+    <!-- nav section -->
+    <nav class="navbar navbar-default" ng-controller="navCtrl">
+        <div class="container-fluid">
+            <div class="nav-header">
+                <a href="#" class="navbar-brand hidden-xs">Contact List App</a>
+                <ul class="nav navbar-nav">
+
+                    <li ng-repeat="navLink in nav.navItems" ng-class="{active : $index === nav.selectedIndex}">
+                        <a class="text-center" ng-click="nav.navClick($index)" ng-href="#/{{navLink}}">{{navLink}}</a>
+                    </li>
+                    <li><a href="Messagesent.html">Message Sent</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row panel panel-primary" ng-controller="homeCtrl">
+            <div class="panel-heading">
+                <h2 class="panel-title">Contact list app</h2>
+            </div>
+
+
+            <!--     contact list   	 -->
+            <div class="col-xs-5 panel-body">
+                <ul class="list-group">
+                    <li class="list-group-item"><h4>Contacts:</h4>
+                        <input class="form-control" placeholder="Seach Your Contacts" type="text" ng-model="searchText">
+                        <contact class="list-group-item"
+                                 ng-repeat="contact in contacts | orderBy: 'name' | filter: searchText "></contact>
+                    </li>
+
+                </ul>
+            </div>
+
+            <!--   ng-view below       -->
+            <div class="col-xs-7">
+                <div class="list-group panel-body">
+                    <div ng-view></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!--  html templates used by angular, usually in separate files -->
+    <script type="text/ng-template" id="default.html">
+
+        <div class="alert alert-success text-center" ng-class="{hidden : !removed}"> {{removed}}</div>
+        <div class="list-group-item text-center">Please select a contact to view</div>
+    </script>
+
+    <!-- 	template for displaying a contacts info	 -->
+    <script type="text/ng-template" id="contact_info.html">
+        <div class="list-group-item">
+            <h3 class="text-center">{{currentContact.name}}</h3>
+            <p>email: <a ng-href="{{currentContact.email}}">{{currentContact.email}}</a></p>
+            <p>phone: {{currentContact.phone}}</p>
+            <p>url: <a ng-href="{{currentContact.url}}">{{currentContact.url}}</a></p>
+            <p>Notes:</p>
+            <div class="row" align="center">
+                <textarea ng-model="message" ng-bind="message" style="text-align: center;width: 80%;height: 70px"
+                          readonly></textarea>
+            </div>
+
+            <div style="padding: 2%" class="row" align="center">
+
+                <button class="btn btn-default btn-warning"
+                        ng-click="SendMessage(message,currentContact.phone,currentContact.name)">
+                    <span> Send Message</span>
+                </button>
+            </div>
+
+        </div>
+    </script>
+
+    <!--      template used for the ng-repeat in the contact list        -->
+    <script type="text/ng-template" id="contact.html">
+        <a ng-href="#/contact-info/{{contacts.indexOf(contact)}}">
+            {{contact.name}}
+        </a>
+    </script>
+</div>
+<script src='http://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js'></script>
+<script src='http://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-route.min.js'></script>
+<script src="node_modules/angular-sanitize/angular-sanitize.js"></script>
+<script src="node_modules/ng-toast/dist/ngToast.min.js"></script>
+<script src="node_modules/angular-local-storage/dist/angular-local-storage.js"></script>
+<script src="js/index.js"></script>
+
+
+</body>
+</html>
